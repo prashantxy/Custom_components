@@ -2,6 +2,7 @@
 
 import CanvasComponent from "./Components/loader_page";
 import PixelTrail from "@/components/PixelTrail";
+import ImageTrail from "@/components/ImageTrail"
 
 export default function Home() {
   return (
@@ -17,15 +18,14 @@ export default function Home() {
           trailSize={0.1}
           maxAge={250}
           interpolate={5}
-          color="#5227FF"
+          color="#5227ff"
           gooeyFilter={{
             id: "custom-goo-filter",
             strength: 2,
           }}
         />
       </div>
-
-
+     
     </main>
   );
 }
