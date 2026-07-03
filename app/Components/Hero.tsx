@@ -12,9 +12,8 @@ export default function Hero() {
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-        const textWidth = heading.current!.offsetWidth;
-        const screenWidth = window.innerWidth;
-        const targetScale = screenWidth / textWidth;
+       const rect = heading.current!.getBoundingClientRect();
+      const targetScale = window.innerWidth / rect.width;
       gsap.to(heading.current, {
         scale: targetScale,
         x: "40vw",

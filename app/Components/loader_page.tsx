@@ -28,7 +28,7 @@ const CanvasComponent: React.FC<CanvasComponentProps> = ({
 
     resize();
 
-    const DURATION = 10000;
+    const DURATION = 5000;
 
     let animationId = 0;
     let startTime: number | null = null;
