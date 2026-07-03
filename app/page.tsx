@@ -4,6 +4,7 @@ import PixelTrail from '@/components/PixelTrail';
 import { useState } from 'react';
 import Hero from './Components/Hero';
 import CanvasComponent from './Components/loader_page';
+import Animate3 from './Components/three';
 
 export default function Home() {
   const [loaderDone, setLoaderDone] = useState(false);
@@ -35,6 +36,7 @@ export default function Home() {
         <>
          
           <Hero />
+          <Animate3/>
         </>
       )}
       <section className="h-screen bg-black" />
