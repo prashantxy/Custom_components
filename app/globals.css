@@ -128,3 +128,59 @@
     @apply font-sans;
   }
 }
+
+.hero-text{
+    background:linear-gradient(
+        90deg,
+        white,
+        #8ddcff,
+        white,
+        #6be5ff,
+        white
+    );
+
+    background-size:300% 100%;
+
+    -webkit-background-clip:text;
+    color:transparent;
+
+    text-shadow:
+        0 0 8px rgba(255,255,255,.7),
+        0 0 20px rgba(255,255,255,.5),
+        0 0 40px rgba(255,255,255,.3);
+
+    animation:gradientMove 5s linear infinite;
+}
+
+@keyframes gradientMove{
+    from{
+        background-position:0%;
+    }
+
+    to{
+        background-position:300%;
+    }
+}
+
+.letter{
+    display:inline-block;
+    will-change:transform,filter;
+}
+.noise{
+    position:absolute;
+    inset:0;
+    background:url("/globe.svg");
+    opacity:.08;
+    mix-blend-mode:screen;
+    pointer-events:none;
+    animation:noise .15s steps(2) infinite;
+}
+
+@keyframes noise{
+    from{
+        transform:translate(0);
+    }
+    to{
+        transform:translate(-20px,-20px);
+    }
+}
