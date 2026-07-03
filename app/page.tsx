@@ -1,17 +1,22 @@
-// app/page.tsx
+'use client';
 
-import CanvasComponent from "./Components/loader_page";
-import PixelTrail from "@/components/PixelTrail";
-import ImageTrail from "@/components/ImageTrail"
+import PixelTrail from '@/components/PixelTrail';
+import { useState } from 'react';
+import Hero from './Components/Hero';
+import CanvasComponent from './Components/loader_page';
 
 export default function Home() {
+  const [loaderDone, setLoaderDone] = useState(false);
+
   return (
-    <main className="relative w-screen h-screen overflow-hidden">
+    <main className="relative min-h-[300vh]">
 
-      {/* Your blob animation */}
-      <CanvasComponent />
-
-      {/* Pixel trail */}
+      {!loaderDone && (
+        <CanvasComponent
+          onComplete={() => setLoaderDone(true)}
+        />
+      )}
+     {/* Pixel trail */}
       <div className="absolute inset-0 z-[60]">
         <PixelTrail
           gridSize={50}
@@ -25,7 +30,17 @@ export default function Home() {
           }}
         />
       </div>
-     
+
+      {loaderDone && (
+        <>
+         
+          <Hero />
+        </>
+      )}
+      <section className="h-screen bg-black" />
+
+    <section className="h-screen bg-red-500" />
+
     </main>
   );
 }

@@ -5,7 +5,13 @@ import { createNoise2D } from 'simplex-noise';
 
 const noise2D = createNoise2D();
 
-const CanvasComponent: React.FC = () => {
+interface CanvasComponentProps {
+  onComplete?: () => void;
+}
+
+const CanvasComponent: React.FC<CanvasComponentProps> = ({
+  onComplete,
+}) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -22,10 +28,11 @@ const CanvasComponent: React.FC = () => {
 
     resize();
 
-    const DURATION = 15000;
+    const DURATION = 10000;
 
-    let animationId: number;
+    let animationId = 0;
     let startTime: number | null = null;
+    let completed = false;
 
     function drawBlobPath(
       centerX: number,
@@ -42,7 +49,6 @@ const CanvasComponent: React.FC = () => {
         const x = Math.cos(angle);
         const y = Math.sin(angle);
 
-        // Fractal (multi-octave) Simplex Noise
         const n1 = noise2D(
           x * 1.2 + time * 0.12,
           y * 1.2 + time * 0.12
@@ -100,7 +106,9 @@ const CanvasComponent: React.FC = () => {
     }
 
     function animate(timestamp: number) {
-      if (startTime === null) startTime = timestamp;
+      if (startTime === null) {
+        startTime = timestamp;
+      }
 
       const elapsed = timestamp - startTime;
       const progress = Math.min(elapsed / DURATION, 1);
@@ -111,10 +119,8 @@ const CanvasComponent: React.FC = () => {
       const centerY = canvas.height / 2;
 
       const maxRadius = Math.hypot(canvas.width, canvas.height);
-
       const radius = eased * maxRadius;
 
-      // Slow movement for natural fluid motion
       const t = elapsed * 0.00035;
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -122,7 +128,7 @@ const CanvasComponent: React.FC = () => {
       ctx.fillStyle = '#111111';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Cut hole
+      // Cut out blob
       ctx.save();
       ctx.globalCompositeOperation = 'destination-out';
 
@@ -131,12 +137,11 @@ const CanvasComponent: React.FC = () => {
 
       ctx.restore();
 
-      // Glow outline
+      // Glow
       ctx.save();
 
       ctx.shadowColor = '#60A5FA';
       ctx.shadowBlur = 80;
-
       ctx.strokeStyle = '#3B82F6';
 
       for (let i = 18; i >= 4; i -= 4) {
@@ -148,6 +153,7 @@ const CanvasComponent: React.FC = () => {
 
       ctx.globalAlpha = 1;
       ctx.lineWidth = 3;
+
       drawBlobPath(centerX, centerY, radius, t);
       ctx.stroke();
 
@@ -155,6 +161,9 @@ const CanvasComponent: React.FC = () => {
 
       if (progress < 1) {
         animationId = requestAnimationFrame(animate);
+      } else if (!completed) {
+        completed = true;
+        onComplete?.();
       }
     }
 
@@ -166,15 +175,12 @@ const CanvasComponent: React.FC = () => {
       cancelAnimationFrame(animationId);
       window.removeEventListener('resize', resize);
     };
-  }, []);
+  }, [onComplete]);
 
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 z-50"
-      style={{
-        pointerEvents: 'none',
-      }}
+      className="fixed inset-0 z-50 pointer-events-none"
     />
   );
 };
