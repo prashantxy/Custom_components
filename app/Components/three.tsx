@@ -22,7 +22,7 @@ export default function Animate3() {
     camera.position.z = 5;
 
     const renderer = new THREE.WebGLRenderer({ antialias: true,alpha: true, });
-    // console.log(renderer.domElement);
+     console.log(renderer.domElement);
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor(0x000000, 0);
     mountRef.current.appendChild(renderer.domElement);
@@ -36,7 +36,7 @@ controls.enableZoom = true;
 controls.enableRotate = true;
     // scene.add(cube);
     camera.position.z = 10;
-    const planeGeometry = new THREE.PlaneGeometry(10,10,10,10);
+    const planeGeometry = new THREE.PlaneGeometry(24,24,17,17);
     const PlaneMaterial = new THREE.MeshPhongMaterial({
        
         side : THREE.DoubleSide,
@@ -47,81 +47,109 @@ controls.enableRotate = true;
 
 
     const planeMesh = new THREE.Mesh(planeGeometry,PlaneMaterial)
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1);
-    scene.add(ambientLight);
-
+   
      const frontLight = new THREE.DirectionalLight(0xffffff, 1);
-frontLight.position.set(0, 0, 1);
-scene.add(frontLight);
+    frontLight.position.set(0, 0, 1);
+    scene.add(frontLight);
 
-const backLight = new THREE.DirectionalLight(0xffffff, 1);
-backLight.position.set(0, 0, -1);
-scene.add(backLight);
+   const backLight = new THREE.DirectionalLight(0xffffff, 1);
+   backLight.position.set(0, 0, -1);
+   scene.add(backLight);
     //  console.log(directionalLight);
      
      scene.add(planeMesh);
     // console.log(scene);
     // console.log(planeMesh.geometry.attributes.position.array);
-    const {array} = planeMesh.geometry.attributes.position;
-    for(let i = 0;i<array.length;i+=3){
-            const x = array[i];
-            const y = array[i+1];
-            const z = array[i+2];
-        //    console.log(array[i]);
+  const position = planeGeometry.attributes.position as THREE.BufferAttribute;
+const vertices = position.array as Float32Array;
 
-           array[i+2] = x-Math.random();
-           
-    }
-    const color = [];
-    
-    for(let i = 0;i<planeMesh.geometry.attributes.position.count;i++){
-       color.push(0,0.19,0.4);
-    }
-    planeMesh.geometry.setAttribute('color', new THREE.BufferAttribute(new Float32Array(color),3))
-    planeGeometry.attributes.position.needsUpdate = true;
-    planeGeometry.computeVertexNormals();   
+
+for (let i = 0; i < vertices.length; i += 3) {
+  vertices[i] += (Math.random() - 0.5) * 2;
+  vertices[i + 1] += (Math.random() - 0.5);
+  vertices[i + 2] += Math.random();
+}
+
+// Save original positions
+const originalPosition = Float32Array.from(vertices);
+
+// Create vertex colors
+const colors: number[] = [];
+
+for (let i = 0; i < position.count; i++) {
+  colors.push(0, 0.19, 0.4);
+}
+
+planeGeometry.setAttribute(
+  "color",
+  new THREE.Float32BufferAttribute(colors, 3)
+);
+
+position.needsUpdate = true;
+planeGeometry.computeVertexNormals();  
     let animationId: number;
    const mouse = new THREE.Vector2();
    let previousFace: THREE.Face | null = null;
+
+   let frame = 0;
+
 function animate() {
   animationId = requestAnimationFrame(animate);
-  controls.update();
-  renderer.render(scene, camera);
-  raycaster.setFromCamera(mouse,camera)
-  const intersect = raycaster.intersectObject(planeMesh);
+
+  frame += 0.01;
+
+  const position = planeGeometry.attributes.position as THREE.BufferAttribute;
+  console.log(position);
+  const vertices = position.array as Float32Array;
+
+  for (let i = 0; i < vertices.length; i += 3) {
+    vertices[i] =
+      originalPosition[i] +
+      Math.cos(frame + i * 0.1) * 0.05;
+
+    vertices[i + 1] =
+      originalPosition[i + 1] +
+      Math.sin(frame + i * 0.1) * 0.10;
+  }
+
+  position.needsUpdate = true;
+
+  raycaster.setFromCamera(mouse, camera);
 
   const intersects = raycaster.intersectObject(planeMesh);
 
-if (intersects.length > 0 && intersects[0].face) {
-  const face = intersects[0].face;
-  const colors = planeGeometry.attributes.color as THREE.BufferAttribute;
+  if (intersects.length > 0 && intersects[0].face) {
+    const face = intersects[0].face;
+    const colors = planeGeometry.attributes.color as THREE.BufferAttribute;
 
-  if (previousFace !== face) {
-    previousFace = face;
+    if (previousFace !== face) {
+      previousFace = face;
 
-    const color = {
-      r: 0.1,
-      g: 0.5,
-      b: 1,
-    };
+      const hoverColor = {
+        r: 0.1,
+        g: 0.5,
+        b: 1,
+      };
 
-    gsap.to(color, {
-      r: 0,
-      g: 0.19,
-      b: 0.4,
-      duration: 1,
+      gsap.to(hoverColor, {
+        r: 0,
+        g: 0.19,
+        b: 0.4,
+        duration: 1,
 
-      onUpdate: () => {
-        colors.setXYZ(face.a, color.r, color.g, color.b);
-        colors.setXYZ(face.b, color.r, color.g, color.b);
-        colors.setXYZ(face.c, color.r, color.g, color.b);
+        onUpdate: () => {
+          colors.setXYZ(face.a, hoverColor.r, hoverColor.g, hoverColor.b);
+          colors.setXYZ(face.b, hoverColor.r, hoverColor.g, hoverColor.b);
+          colors.setXYZ(face.c, hoverColor.r, hoverColor.g, hoverColor.b);
 
-        colors.needsUpdate = true;
-      },
-    });
-   
+          colors.needsUpdate = true;
+        },
+      });
+    }
   }
-}
+
+  controls.update();
+  renderer.render(scene, camera);
 }
 
 animate();
