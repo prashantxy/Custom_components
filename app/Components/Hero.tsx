@@ -54,8 +54,8 @@ const scrollDistance = window.innerHeight;
   ref={heading}
   className="
     absolute
-    top-120
-    left-10
+    top-0
+    left-0
     text-7xl
     font-bold
     text-white
