@@ -103,7 +103,7 @@ return () => {
   return (
   <div
     ref={mountRef}
-    className="fixed inset-0 -z-10"
+    className="w-screen h-screen"
   />
 );
 }

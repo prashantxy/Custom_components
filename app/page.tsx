@@ -34,8 +34,9 @@ export default function Home() {
 
       {loaderDone && (
         <>
-          <Animate3/>
+          
           <Hero />
+          <Animate3/>
          
         </>
       )}
