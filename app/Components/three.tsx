@@ -12,6 +12,8 @@ export default function Animate3() {
 
   useEffect(() => {
     if (!mountRef.current) return;
+
+    const raycaster = new THREE.Raycaster()
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
       75,
@@ -35,8 +37,8 @@ controls.dampingFactor = 0.05;
 controls.enableZoom = true;
 controls.enableRotate = true;
     // scene.add(cube);
-    camera.position.z = 5;
-    const planeGeometry = new THREE.PlaneGeometry(5,5,10,10);
+    camera.position.z = 10;
+    const planeGeometry = new THREE.PlaneGeometry(8,8,10,10);
     const PlaneMaterial = new THREE.MeshPhongMaterial({
         color : 0x00ff00,
         side : THREE.DoubleSide,
@@ -57,7 +59,7 @@ controls.enableRotate = true;
     console.log(scene);
     console.log(planeMesh.geometry.attributes.position.array);
     const {array} = planeMesh.geometry.attributes.position;
-    for(let i = 0;i<array.length;i+=3){
+    for(let i = 3;i<array.length;i+=3){
             const x = array[i];
             const y = array[i+1];
             const z = array[i+2];
@@ -67,14 +69,24 @@ controls.enableRotate = true;
            
     }
     let animationId: number;
-
+const mouse = new THREE.Vector2();
 function animate() {
   animationId = requestAnimationFrame(animate);
   controls.update();
   renderer.render(scene, camera);
+  raycaster.setFromCamera(mouse,camera)
 }
 
 animate();
+
+addEventListener('mousemove',(event)=>{
+    mouse.x = (event.clientX/innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY/innerHeight) * 2 + 1;
+
+    console.log(mouse);
+})
+
+
 
 return () => {
   cancelAnimationFrame(animationId);

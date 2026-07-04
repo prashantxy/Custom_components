@@ -48,7 +48,7 @@ const scrollDistance = window.innerHeight;
   return (
     <section
       ref={section}
-      className="relative h-screen  overflow-hidden"
+      className="relative h-screen bg-black overflow-hidden"
     >
      <h1
   ref={heading}
@@ -58,7 +58,7 @@ const scrollDistance = window.innerHeight;
     left-0
     text-7xl
     font-bold
-    text-black
+    text-white
     origin-top-left
   "
 >
