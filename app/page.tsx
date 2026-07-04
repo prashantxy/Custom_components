@@ -34,9 +34,9 @@ export default function Home() {
 
       {loaderDone && (
         <>
-         
-          <Hero />
           <Animate3/>
+          <Hero />
+         
         </>
       )}
       <section className="h-screen bg-black" />

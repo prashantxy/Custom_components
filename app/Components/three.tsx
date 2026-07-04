@@ -3,6 +3,10 @@
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+
+
+
 export default function Animate3() {
   const mountRef = useRef<HTMLDivElement>(null);
 
@@ -17,16 +21,19 @@ export default function Animate3() {
     );
     camera.position.z = 5;
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    const renderer = new THREE.WebGLRenderer({ antialias: true,alpha: true, });
     console.log(renderer.domElement);
     renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0x000000, 0);
     mountRef.current.appendChild(renderer.domElement);
-    
+    const controls = new OrbitControls(camera,renderer.domElement);
     const geometry = new THREE.BoxGeometry();
     const material = new THREE.MeshBasicMaterial({color:0x00ff00});
     const cube = new THREE.Mesh(geometry, material);
-    
+    controls.enableDamping = true;
+controls.dampingFactor = 0.05;
     // scene.add(cube);
+    camera.position.z = 5;
     const planeGeometry = new THREE.PlaneGeometry(5,5,10,10);
     const PlaneMaterial = new THREE.MeshPhongMaterial({
         color : 0x00ff00,
@@ -42,40 +49,47 @@ export default function Animate3() {
 
      const directionalLight = new THREE.DirectionalLight(0x00ff00, 2);
       directionalLight.position.set(3, 3, 3);
-  console.log(directionalLight);
+     console.log(directionalLight);
      scene.add(directionalLight);
     scene.add(planeMesh);
     console.log(scene);
     console.log(planeMesh.geometry.attributes.position.array);
     const {array} = planeMesh.geometry.attributes.position;
-    for(let i = 3;i<array.length;i+=3){
+    for(let i = 0;i<array.length;i+=3){
             const x = array[i];
             const y = array[i+1];
             const z = array[i+2];
            console.log(array[i]);
 
-           array[i+2] = x+Math.random();
+           array[i+2] = x-Math.random();
            
     }
-    function animate() {
-      requestAnimationFrame(animate);
+    let animationId: number;
 
-      cube.rotation.x += 0.05;
-      cube.rotation.y += 0.01;
+function animate() {
+  animationId = requestAnimationFrame(animate);
+  controls.update();
+  renderer.render(scene, camera);
+}
 
-      renderer.render(scene, camera);
-    }
+animate();
 
-    animate();
+return () => {
+  cancelAnimationFrame(animationId);
+   controls.dispose();
+  renderer.dispose();
 
-    return () => {
-      renderer.dispose();
+  if (mountRef.current?.contains(renderer.domElement)) {
+    mountRef.current.removeChild(renderer.domElement);
+  }
+};
 
-      if (mountRef.current?.contains(renderer.domElement)) {
-        mountRef.current.removeChild(renderer.domElement);
-      }
-    };
   }, []);
 
-  return <div ref={mountRef} />;
+  return (
+  <div
+    ref={mountRef}
+    className="fixed inset-0 -z-10"
+  />
+);
 }
