@@ -17,8 +17,8 @@ export default function Home() {
           onComplete={() => setLoaderDone(true)}
         />
       )}
-     {/* Pixel trail
-      <div className="absolute inset-0 z-[60]">
+    
+      {/* <div className="absolute inset-0 z-[60]">
         <PixelTrail
           gridSize={50}
           trailSize={0.1}
