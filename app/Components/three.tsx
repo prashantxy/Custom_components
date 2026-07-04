@@ -32,6 +32,8 @@ export default function Animate3() {
     const cube = new THREE.Mesh(geometry, material);
     controls.enableDamping = true;
 controls.dampingFactor = 0.05;
+controls.enableZoom = true;
+controls.enableRotate = true;
     // scene.add(cube);
     camera.position.z = 5;
     const planeGeometry = new THREE.PlaneGeometry(5,5,10,10);
