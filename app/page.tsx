@@ -37,12 +37,11 @@ export default function Home() {
           
           <Hero />
           <Animate3/>
-         
+          
         </>
       )}
-      <section className="h-screen bg-black" />
-
-    <section className="h-screen bg-red-500" />
+    
+    <section className="h-screen bg-black-500" />
 
     </main>
   );

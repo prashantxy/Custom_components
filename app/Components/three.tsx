@@ -29,7 +29,7 @@ export default function Animate3() {
     const controls = new OrbitControls(camera,renderer.domElement);
     const geometry = new THREE.BoxGeometry();
     const material = new THREE.MeshBasicMaterial({color:0x00ff00});
-    const cube = new THREE.Mesh(geometry, material);
+    // const cube = new THREE.Mesh(geometry, material);
     controls.enableDamping = true;
 controls.dampingFactor = 0.05;
 controls.enableZoom = true;
@@ -99,7 +99,7 @@ function animate() {
   frame += 0.01;
 
   const position = planeGeometry.attributes.position as THREE.BufferAttribute;
-  console.log(position);
+//   console.log(position);
   const vertices = position.array as Float32Array;
 
   for (let i = 0; i < vertices.length; i += 3) {
@@ -174,7 +174,7 @@ return () => {
 
   }, []);
 
-  return (
+   return (
   <div className="relative w-screen h-screen">
     <div ref={mountRef} className="absolute inset-0" />
 
