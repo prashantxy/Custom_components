@@ -4,7 +4,8 @@ import PixelTrail from '@/components/PixelTrail';
 import { useState } from 'react';
 import Hero from './Components/Hero';
 import CanvasComponent from './Components/loader_page';
-import Animate3 from './Components/three';
+import Animate3 from './Components/three_landing';
+import Globe from './Components/three_globe';
 
 export default function Home() {
   const [loaderDone, setLoaderDone] = useState(false);
@@ -12,11 +13,11 @@ export default function Home() {
   return (
     <main className="relative min-h-[300vh]">
 
-      {!loaderDone && (
+      {/* {!loaderDone && (
         <CanvasComponent
           onComplete={() => setLoaderDone(true)}
         />
-      )}
+      )} */}
     
       {/* <div className="absolute inset-0 z-[60]">
         <PixelTrail
@@ -32,14 +33,14 @@ export default function Home() {
         />
       </div> */}
 
-      {loaderDone && (
-        <>
+      {/* {loaderDone && (
+        <> */}
+          {/* <Globe/> */}
+          {/* <Hero /> */}
+         <Animate3/>
           
-          <Hero />
-          <Animate3/>
-          
-        </>
-      )}
+        {/* </>
+      )} */}
     
     <section className="h-screen bg-black-500" />
 

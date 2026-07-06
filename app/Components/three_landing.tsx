@@ -32,11 +32,16 @@ export default function Animate3() {
     // const cube = new THREE.Mesh(geometry, material);
     controls.enableDamping = true;
 controls.dampingFactor = 0.05;
+// Example: Limit zoom for a PerspectiveCamera
+// controls.minDistance = 20;
+// // controls.maxDistance = 200;
+
+
 controls.enableZoom = true;
 controls.enableRotate = true;
     // scene.add(cube);
     camera.position.z = 10;
-    const planeGeometry = new THREE.PlaneGeometry(34,34,17,17);
+    const planeGeometry = new THREE.PlaneGeometry(40,40,20,20);
     const PlaneMaterial = new THREE.MeshPhongMaterial({
        
         side : THREE.DoubleSide,
@@ -175,12 +180,12 @@ return () => {
   }, []);
 
    return (
-  <div className="relative w-screen h-screen">
+  <div className="relative w-screen h-screen bg-black">
     <div ref={mountRef} className="absolute inset-0" />
 
     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-      <h1 className="text-white text-7xl font-bold">
-        HELLO
+      <h1 className="text-white text-7xl font-bold text-center">
+        CHASE A CHICK BUT NEVER CHASE A BITCH
       </h1>
     </div>
   </div>
