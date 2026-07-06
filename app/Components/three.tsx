@@ -30,13 +30,13 @@ export default function Animate3() {
     const geometry = new THREE.BoxGeometry();
     const material = new THREE.MeshBasicMaterial({color:0x00ff00});
     const cube = new THREE.Mesh(geometry, material);
- controls.enableDamping = true;
+    controls.enableDamping = true;
 controls.dampingFactor = 0.05;
 controls.enableZoom = true;
 controls.enableRotate = true;
     // scene.add(cube);
     camera.position.z = 10;
-    const planeGeometry = new THREE.PlaneGeometry(24,24,17,17);
+    const planeGeometry = new THREE.PlaneGeometry(34,34,17,17);
     const PlaneMaterial = new THREE.MeshPhongMaterial({
        
         side : THREE.DoubleSide,
@@ -175,9 +175,14 @@ return () => {
   }, []);
 
   return (
-  <div
-    ref={mountRef}
-    className="w-screen h-screen"
-  />
+  <div className="relative w-screen h-screen">
+    <div ref={mountRef} className="absolute inset-0" />
+
+    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+      <h1 className="text-white text-7xl font-bold">
+        HELLO
+      </h1>
+    </div>
+  </div>
 );
 }
