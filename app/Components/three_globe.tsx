@@ -24,10 +24,11 @@ export default function Globe(){
       1000
      );
 
-     camera.position.z = 5;
+     camera.position.z = 15;
 
      const renderer = new THREE.WebGLRenderer({antialias:true,alpha:true});
      renderer.setSize(window.innerWidth,window.innerHeight);
+     renderer.setPixelRatio(window.devicePixelRatio);
      renderer.setClearColor(0x000000,0);
      
      if(mountRef.current){
@@ -35,16 +36,18 @@ export default function Globe(){
      }
      const controls = new OrbitControls(camera,renderer.domElement);
 
-     const geometry = new THREE.SphereGeometry();
-     const Material = new THREE.MeshPhongMaterial({color:0x00ff00});
+     const geometry = new THREE.SphereGeometry(5,20,20);
+     const Material = new THREE.MeshBasicMaterial({
+        map: new THREE.TextureLoader().load('/earth_lat.webp')
+    });
      const globe = new THREE.Mesh(geometry,Material);
+     console.log(globe);
       controls.enableDamping = true;
 controls.dampingFactor = 0.05;
-// Example: Limit zoom for a PerspectiveCamera
+
 controls.minDistance = 2;
 controls.maxDistance = 10;
 
-// Example: Disable zoom
 controls.enableZoom = true;
 controls.enableRotate = true;
 
@@ -78,7 +81,7 @@ return () => {
     return (
        <div
         ref={mountRef}
-        className="w-screen h-screen"
+        className="bg-black w-screen h-screen"
     />
     );
 }

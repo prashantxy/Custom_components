@@ -35,9 +35,9 @@ export default function Home() {
 
       {/* {loaderDone && (
         <> */}
-          {/* <Globe/> */}
+          <Globe />
           {/* <Hero /> */}
-         <Animate3/>
+         {/* <Animate3/> */}
           
         {/* </>
       )} */}
