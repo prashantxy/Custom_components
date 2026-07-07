@@ -367,9 +367,7 @@ starsMaterial.dispose();
     <div ref={mountRef} className="absolute inset-0" />
 
     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-      <h1 className="text-white text-7xl font-bold text-center">
-        CHASE A CHICK BUT NEVER CHASE A BITCH
-      </h1>
+      
       <button
   onClick={exploreEarth}
   className="absolute bottom-10 left-1/2 -translate-x-1/2
